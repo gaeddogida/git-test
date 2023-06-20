@@ -1,0 +1,62 @@
+'use strict'
+
+const path = require('path'),
+    fs = require('fs'),
+    
+    http = require('http'),
+    config = require('../config')
+
+console.log(`server config : ${JSON.stringify(config, null, '\t')}`)
+//const logger = require('@amuzlab/logger')(Object.assign({}, config.log))
+
+const app = require('../app')
+
+
+
+
+
+
+app.set('port', config.port)
+
+const server = http.createServer(app)
+
+server.timeout = 0
+server.listen(config.port, '0.0.0.0')
+server
+    .on(
+        'err',
+        err => {
+            if (err.syscall !== 'listen') {
+                throw err;
+            }
+
+            let bind = typeof config.port === 'string' ? 'Pipe ' + config.port : 'Port ' + config.port;
+
+            switch (err.code) {
+                case 'EACCES':
+                case 'EADDRINUSE':
+                    process.exit(1);
+                    break;
+                default:
+                    throw err;
+            }
+        })
+    .on(
+        'listening',
+        () => console.log(`server start(port: ${server.address().port})`))
+    .on(
+        'close',
+        () => console.log(`server close (port : ${server.address().port})`))
+//    .on(
+//        'clientError',
+//        (err, socket) => logger.error(`client error HTTP 400 BAD Request (err : ${err.message})`))
+
+
+process
+    .on(
+        'unhandledRejection',
+        //err => logger.error('unhandledRejection %s', err.stack))
+        err => console.log(`unhandledRejection ${JSON.stringify(err)} ${err.stack}`))
+    .on(
+        'uncaughtException',
+        err => console.log(`uncaughtException ${err.stack}`))

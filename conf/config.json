@@ -1,0 +1,13 @@
+{
+    "port": 9100,
+    "log": {
+        "level": "debug",
+        "logDir": "logs",
+        "transport": "file",
+        "logFileName": "server.log",
+        "maxSize": "50m",
+        "maxFiles": "14d"
+    },
+    "sourcePath": "Z:\\origin_dev\\drama",
+    "targetPath": "Z:\\vams_video\\drama"
+}
